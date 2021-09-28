@@ -36,13 +36,13 @@ function createList() {
 }
 
 function removeItem(ele) {
-  const itemId = ele.getAttribute('id');
+  const selectedItemId = ele.getAttribute('id');
 
   for (let i = 0; i < listContainer.children.length; i++) {
     const elementId = listContainer.children[i].children[1].children[1].id;
 
-    if (itemId === elementId) {
-      storedData.splice(itemId, 1);
+    if (selectedItemId === elementId) {
+      storedData.splice(selectedItemId, 1);
       localStorage.setItem('myList', JSON.stringify(storedData));
     }
   }
