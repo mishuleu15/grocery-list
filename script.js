@@ -1,9 +1,14 @@
 const submitBtn = document.querySelector('[type="submit"]');
 const inputText = document.querySelector('[type="text"]');
 const editBtn = document.querySelector('.fa-edit');
+const container = document.querySelector('.container');
 const listContainer = document.querySelector('.list-container');
 
 const storedData = JSON.parse(localStorage.getItem('myList')) || [];
+
+function removeAllItems() {
+  localStorage.removeItem('myList');
+}
 
 function displayList() {
   listContainer.innerHTML = '';
@@ -24,10 +29,31 @@ function displayList() {
 function addItem(e) {
   e.preventDefault();
 
-  createList();
-  inputText.value = '';
-  localStorage.setItem('myList', JSON.stringify(storedData));
-  displayList();
+  // Check if value entered
+  if (inputText.value === '') {
+    const p = document.createElement('p');
+    p.textContent = 'Please Enter Value';
+    container.appendChild(p);
+    setTimeout(() => {
+      container.removeChild(p);
+      submitBtn.disabled = false;
+    }, 1000);
+    submitBtn.disabled = true;
+  } else {
+    createList();
+
+    inputText.value = '';
+    localStorage.setItem('myList', JSON.stringify(storedData));
+    displayList();
+
+    const p = document.createElement('p');
+    p.textContent = 'Item Added';
+    p.classList.add('add-item');
+    container.appendChild(p);
+    setTimeout(() => {
+      container.removeChild(p);
+    }, 1000);
+  }
 }
 
 function createList() {
@@ -46,7 +72,14 @@ function removeItem(ele) {
       localStorage.setItem('myList', JSON.stringify(storedData));
     }
   }
+
   displayList();
+  const p = document.createElement('p');
+  p.textContent = 'Item Removed';
+  container.appendChild(p);
+  setTimeout(() => {
+    container.removeChild(p);
+  }, 1000);
 }
 
 // On Load
