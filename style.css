@@ -136,4 +136,5 @@ input[type='submit']:hover {
 .remove-all {
   color: rgb(220, 20, 60, 0.7);
   letter-spacing: 1px;
+  cursor: pointer;
 }

@@ -8,6 +8,28 @@ const storedData = JSON.parse(localStorage.getItem('myList')) || [];
 
 function removeAllItems() {
   localStorage.removeItem('myList');
+  location.reload();
+}
+
+const h3 = document.createElement('h3');
+function addClearItemsBtn() {
+  h3.textContent = 'Clear Items';
+  h3.classList.add('remove-all');
+  container.appendChild(h3);
+}
+
+function removeClearItemsBtn() {
+  if (container.lastElementChild.textContent === 'Clear Items') {
+    container.removeChild(h3);
+  }
+}
+
+function checkData() {
+  if (storedData.length > 0) {
+    addClearItemsBtn();
+  } else {
+    removeClearItemsBtn();
+  }
 }
 
 function displayList() {
@@ -24,6 +46,7 @@ function displayList() {
 
     listContainer.innerHTML += div;
   });
+  checkData();
 }
 
 function addItem(e) {
@@ -84,5 +107,7 @@ function removeItem(ele) {
 
 // On Load
 displayList();
+checkData();
 
 submitBtn.addEventListener('click', addItem);
+h3.addEventListener('click', removeAllItems);
