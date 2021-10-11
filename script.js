@@ -6,12 +6,28 @@ const listContainer = document.querySelector('.list-container');
 
 const storedData = JSON.parse(localStorage.getItem('myList')) || [];
 
-function removeAllItems() {
-  localStorage.removeItem('myList');
-  location.reload();
+const h3 = document.createElement('h3');
+
+let id;
+
+function editItem(ele) {
+  submitBtn.setAttribute('value', 'Edit');
+
+  const selectedItemId = ele.getAttribute('id');
+
+  for (let i = 0; i < listContainer.children.length; i++) {
+    const elementId = listContainer.children[i].children[1].children[1].id;
+
+    if (selectedItemId === elementId) {
+      inputText.value = Object.values(storedData[selectedItemId])
+        .join('')
+        .toLowerCase();
+
+      id = selectedItemId;
+    }
+  }
 }
 
-const h3 = document.createElement('h3');
 function addClearItemsBtn() {
   h3.textContent = 'Clear Items';
   h3.classList.add('remove-all');
@@ -39,7 +55,7 @@ function displayList() {
     const div = `<div class="list">
     <span>${ele}</span>
     <div class="edit-delete">
-      <i class="fas fa-edit"></i>
+      <i class="fas fa-edit" onclick="editItem(this)" id=${index}></i>
       <i class="fas fa-trash-alt" onclick="removeItem(this)" id=${index}></i>
     </div>
   </div>`;
@@ -62,6 +78,13 @@ function addItem(e) {
       submitBtn.disabled = false;
     }, 1000);
     submitBtn.disabled = true;
+  } else if (submitBtn.getAttribute('value') === 'Edit') {
+    submitBtn.removeAttribute('value');
+    storedData.splice(id, 1);
+    createList();
+    localStorage.setItem('myList', JSON.stringify(storedData));
+    inputText.value = '';
+    displayList();
   } else {
     createList();
 
@@ -81,7 +104,9 @@ function addItem(e) {
 
 function createList() {
   const id = Math.random();
-  storedData.push({ [id]: inputText.value });
+  storedData.push({
+    [id]: inputText.value.charAt(0).toUpperCase() + inputText.value.slice(1),
+  });
 }
 
 function removeItem(ele) {
@@ -103,6 +128,11 @@ function removeItem(ele) {
   setTimeout(() => {
     container.removeChild(p);
   }, 1000);
+}
+
+function removeAllItems() {
+  localStorage.removeItem('myList');
+  location.reload();
 }
 
 // On Load
